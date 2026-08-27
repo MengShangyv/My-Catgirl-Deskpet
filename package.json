@@ -1,0 +1,16 @@
+{
+  "name": "nya-pet",
+  "version": "0.1.0",
+  "description": "Q版猫娘桌宠：实时汇报 agent 工作进展",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node scripts/test.mjs"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0"
+  }
+}

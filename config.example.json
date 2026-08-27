@@ -1,0 +1,12 @@
+{
+  "_comment": {
+    "使用说明": "将本文件内容复制到 ~/.nya-pet/config.json（Windows 下即 C:\\Users\\<用户名>\\.nya-pet\\config.json）并按需修改。配置文件完全可选，不存在时所有字段自动使用默认值。",
+    "sessionRoots": "要监控的会话日志根目录列表（字符串数组）。程序会递归监听每个目录下的所有 *.jsonl 文件：新文件视为新会话，追加写入视为进展更新。默认为 [\"<用户主目录>/.codex/sessions\"]。可以添加其它 agent 的日志目录（注意 Windows 路径需双反斜杠转义），例如下方第二项的 Claude Code 日志目录；注意当前版本只内置 codex 日志的解析规则，其它 agent 的目录只能被监听到文件变化，状态识别有限。",
+    "idleTimeoutMs": "判定 agent 进入 idle（发呆）状态的超时毫秒数（数字）。一个会话超过该时长没有任何新日志事件，就会被判定为 idle。默认 180000，即 3 分钟。"
+  },
+  "sessionRoots": [
+    "C:\\Users\\你的用户名\\.codex\\sessions",
+    "C:\\Users\\你的用户名\\.claude\\projects"
+  ],
+  "idleTimeoutMs": 180000
+}

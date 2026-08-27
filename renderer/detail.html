@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>猫娘情报站</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(160deg, #fff5f9, #ffe9f2);
+      color: #5a4a52;
+    }
+    header { padding: 14px 20px; border-bottom: 2px solid #ffb7d5; }
+    header h1 { font-size: 18px; color: #e0699b; margin: 0; }
+    header small { color: #b98a9f; }
+    #list { padding: 12px 16px; }
+    .agent {
+      background: #fff; border: 2px solid #ffd3e5; border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 10px;
+    }
+    .agent .head { display: flex; align-items: center; gap: 8px; }
+    .agent .name { font-weight: bold; color: #e0699b; }
+    .agent .badge {
+      font-size: 11px; padding: 2px 8px; border-radius: 10px; color: #fff;
+    }
+    .badge.working { background: #f59e0b; animation: pulse 1.5s infinite; }
+    .badge.done { background: #22c55e; }
+    .badge.idle { background: #94a3b8; }
+    .badge.unknown { background: #cbd5e1; }
+    .agent .meta { font-size: 12px; color: #9b7f8e; margin-top: 4px; }
+    .agent .msg { font-size: 13px; margin-top: 6px; background: #fff7fb; border-radius: 8px; padding: 8px; }
+    .empty { text-align: center; color: #b98a9f; padding: 60px 0; }
+    @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .55 } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🐾 猫娘情报站</h1>
+    <small>各 agent 实时工作状态（数据来自 ~/.codex/sessions）</small>
+  </header>
+  <div id="list"><div class="empty">正在收集情报中 nya~…</div></div>
+  <script>
+    const STATUS_TEXT = { working: '干活中', done: '已完成', idle: '发呆中', unknown: '待命', error: '异常' };
+    function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function fmtTime(ts) {
+      if (!ts) return '';
+      const d = new Date(ts);
+      return d.toLocaleTimeString('zh-CN', { hour12: false });
+    }
+    window.nyaPet.onAgentsUpdate((agents) => {
+      const list = document.getElementById('list');
+      if (!agents.length) {
+        list.innerHTML = '<div class="empty">没有发现活跃的 agent 喵~<br/>跑一个 codex 任务试试？</div>';
+        return;
+      }
+      list.innerHTML = agents.map(a => `
+        <div class="agent">
+          <div class="head">
+            <span class="name">${esc(a.originator || 'codex')}</span>
+            <span>· ${esc(a.project || '?')}</span>
+            <span class="badge ${a.status}">${STATUS_TEXT[a.status] || a.status}</span>
+          </div>
+          <div class="meta">
+            ${esc(a.cwd || '')}
+            · 开始于 ${fmtTime(a.startedAt)} · 最近活动 ${fmtTime(a.lastEventAt)}
+            · ${a.turns || 0} 轮 · ${(a.tokens / 1000).toFixed(1)}k tokens
+          </div>
+          <div class="msg">${esc(a.summary || '（暂无消息）')}</div>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>

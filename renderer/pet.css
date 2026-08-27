@@ -1,0 +1,118 @@
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+html, body {
+  background: transparent;
+  overflow: hidden;
+  height: 100vh;
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+.bubble {
+  position: absolute;
+  top: 8px; left: 50%;
+  transform: translateX(-50%);
+  max-width: 300px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid #ffb7d5;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: #5a4a52;
+  box-shadow: 0 4px 14px rgba(255, 150, 190, 0.35);
+  cursor: pointer;
+  transition: opacity 0.4s;
+  z-index: 10;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -8px; left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #ffb7d5;
+  border-bottom: 0;
+}
+.bubble .who { font-weight: bold; color: #e0699b; }
+.bubble.hidden { opacity: 0; pointer-events: none; }
+
+.pet {
+  position: absolute;
+  bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  width: 220px; height: 260px;
+  -webkit-app-region: drag;
+  cursor: grab;
+}
+.pet-img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: none;
+  animation: float 3s ease-in-out infinite;
+}
+.pet.has-img .pet-img { display: block; }
+.pet.has-img .pet-fallback { display: none; }
+
+/* ---------- CSS 兜底猫娘 ---------- */
+.pet-fallback { width: 100%; height: 100%; position: relative; animation: float 3s ease-in-out infinite; }
+.cat { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 160px; height: 200px; }
+.face {
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+  width: 140px; height: 130px;
+  background: #fff;
+  border: 3px solid #4a3b42;
+  border-radius: 48% 48% 46% 46%;
+}
+.ear { position: absolute; top: 18px; width: 0; height: 0; border: 34px solid transparent; }
+.ear-l { left: 28px; border-bottom-color: #fff; transform: rotate(-18deg); }
+.ear-r { right: 28px; border-bottom-color: #fff; transform: rotate(18deg); }
+.ear-l::after, .ear-r::after {
+  content: ""; position: absolute; top: 14px; left: -18px;
+  border: 18px solid transparent; border-bottom-color: #ffb7d5;
+}
+.eye {
+  position: absolute; top: 48px; width: 16px; height: 22px;
+  background: #4a3b42; border-radius: 50%;
+  animation: blink 4s infinite;
+}
+.eye-l { left: 40px; } .eye-r { right: 40px; }
+.mouth {
+  position: absolute; top: 82px; left: 50%; transform: translateX(-50%);
+  width: 22px; height: 12px;
+  border: 3px solid #4a3b42; border-top: none;
+  border-radius: 0 0 50% 50%;
+}
+.blush { position: absolute; top: 72px; width: 18px; height: 9px; background: #ffc7dd; border-radius: 50%; opacity: .8; }
+.blush-l { left: 16px; } .blush-r { right: 16px; }
+.paw {
+  position: absolute; bottom: 26px; width: 32px; height: 32px;
+  background: #fff; border: 3px solid #4a3b42; border-radius: 50%;
+}
+.paw-l { left: 10px; animation: pawwave 1.2s ease-in-out infinite; }
+.paw-r { right: 10px; }
+.tail {
+  position: absolute; bottom: 10px; left: -14px; width: 50px; height: 60px;
+  border: 10px solid #fff; border-color: transparent transparent transparent #fff;
+  border-radius: 50%;
+  filter: drop-shadow(2px 0 0 rgba(74,59,66,0));
+  transform-origin: bottom right;
+  animation: sway 2.4s ease-in-out infinite;
+}
+
+/* 状态差异（兜底猫娘） */
+.mood-idle .eye { height: 4px; border-radius: 2px; }
+.mood-working .eye { animation: none; }
+.mood-done .paw-l { animation: pawwave .4s ease-in-out infinite; }
+.mood-error .mouth { border-radius: 50%; height: 20px; width: 14px; border: 3px solid #4a3b42; }
+
+.hint {
+  position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: rgba(255,255,255,.55);
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  -webkit-app-region: no-drag;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+@keyframes blink { 0%,92%,100% { transform: scaleY(1) } 96% { transform: scaleY(.1) } }
+@keyframes pawwave { 0%,100% { transform: rotate(0) } 50% { transform: rotate(-24deg) } }
+@keyframes sway { 0%,100% { transform: rotate(8deg) } 50% { transform: rotate(-8deg) } }
